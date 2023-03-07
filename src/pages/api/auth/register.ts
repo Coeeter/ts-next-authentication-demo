@@ -1,6 +1,7 @@
 import { firestore } from '@/config/Firebase';
 import User from '@/models/User';
 import { hashPassword } from '@/services/HashingService';
+import { generateToken } from '@/services/TokenService';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -25,5 +26,9 @@ export default async function handler(
   };
   if (imageUrl) user.image = imageUrl;
   const docRef = await firestore.collection('users').add(user);
-  res.status(201).json({ id: docRef.id });
+  const token = generateToken({
+    id: docRef.id,
+    username: user.username,
+  });
+  res.status(201).json({ token });
 }

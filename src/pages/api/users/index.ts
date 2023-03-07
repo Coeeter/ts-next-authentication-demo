@@ -34,6 +34,13 @@ async function updateAccount(req: NextApiRequest, res: NextApiResponse) {
   res.status(200).json(updatedUser);
 }
 
+async function deleteAccount(req: NextApiRequest, res: NextApiResponse) {
+  const user = await tokenValidator(req, res);
+  if (!user) return;
+  await firestore.collection('users').doc(user.id!).delete();
+  res.status(200).end();
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<User[]>
@@ -44,6 +51,9 @@ export default async function handler(
       break;
     case 'PUT':
       await updateAccount(req, res);
+      break;
+    case 'DELETE':
+      await deleteAccount(req, res);
       break;
     default:
       res.status(405).end();
