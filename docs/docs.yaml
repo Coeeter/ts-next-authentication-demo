@@ -2,8 +2,6 @@ openapi: 3.0.0
 info:
   version: "1.0.0"
   title: Authentication API
-servers:
-  - url: authentication-demo.nasportfolio.com
 paths:
   /api/auth/login:
     post:
